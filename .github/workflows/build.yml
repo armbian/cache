@@ -39,7 +39,7 @@ jobs:
 
           ROOTFSCACHE_VERSION=$(wget --tries=10 -O - -o /dev/null https://github.com/armbian/cache/releases/download/latest/rootfscache.version || true)
           ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
-          echo "${ROOTFSCACHE_VERSION}"
+          echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
@@ -57,7 +57,7 @@ jobs:
         with:
           artifacts: "rootfscache.version"
           repo: "cache"
-          tag: ${{ needs.release-start.outputs.rootfscache_version }}
+          tag: ${{ env.ROOTFSCACHE_VERSION }}
           name: "Build in progress"
           #bodyFile: "build/.github/Releases-wip.md"
           allowUpdates: true          
