@@ -2,22 +2,13 @@ name: Build Rootfs Cache
 #
 # Generates rootfs cache and uploads it to:
 #
-#     https://github.com/armbian/mirror/releases/tag/rootfs 
+#     https://github.com/armbian/cache/releases/tag/latest
 #     https://cache.armbian.com/rootfs/
 #
 
 on:
   schedule:
       - cron: "30 0 15 * *" # Runs at 00:30 UTC on the 15st of every month.
-
-  push:
-    branches:
-      - 'master'
-    paths:
-      - 'config/distributions/**'
-      - 'config/cli/**'
-      - 'config/desktop/**'
-
   workflow_dispatch:
 
 jobs:
@@ -32,7 +23,7 @@ jobs:
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
-      # Synyching procedure expects this value
+      # Synching procedure expects this value
       - run: |
           echo "not empty" > changes
 
@@ -42,59 +33,32 @@ jobs:
           name: changes
           if-no-files-found: ignore
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          repository: armbian/build
-          path: build
-          clean: false
-
-      - name: Remove current status
-        run: |
-          sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
-          sudo apt-get -y -qq install sshfs
-          sudo mkdir -p build/cache/rootfs.upload || true
-
-          # locally mount via NFS
-          if [[ $(curl -s http://ifconfig.me) == "93.103.15.56" ]]; then
-              sudo mount nas:/tank/armbian/users.armbian.com/upload/rootfs build/cache/rootfs.upload
-          else
-              sudo sshfs upload@users.armbian.com:/rootfs build/cache/rootfs.upload -o IdentityFile=~/.ssh/id_rsa -o reconnect -o allow_other || true
-          fi
-          # remove true in sshfs when all runners are on jammy
-
-          sudo rm build/cache/rootfs.upload/* || true
-          sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
-
       - id: env-vars
         name: Read current version
         run: |
 
-          ROOTFSCACHE_VERSION=$(wget --tries=10 -O - -o /dev/null https://github.com/armbian/mirror/releases/download/rootfs/rootfscache.version || true)
+          ROOTFSCACHE_VERSION=$(wget --tries=10 -O - -o /dev/null https://github.com/armbian/cache/releases/download/latest/rootfscache.version || true)
           ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
           echo "${ROOTFSCACHE_VERSION}"
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
-      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        if: ${{ github.repository_owner == 'Armbian' }}
+      - name: Purge
+        uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
-          delete_release: true
-          repo: 'armbian/mirror'
-          tag_name: "rootfs"
+          keep_latest: 3
         env:
-          GITHUB_TOKEN: ${{ secrets.CR_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Updating releases
         uses: ncipollo/release-action@v1.10.0
         with:
           artifacts: "rootfscache.version"
-          repo: "mirror"
-          tag: "rootfs"
+          repo: "cache"
+          tag: ${{ env.rootfscache_version }}
           name: "Build in progress"
-          bodyFile: "build/.github/Releases-wip.md"
-          allowUpdates: true
-          removeArtifacts: true
+          #bodyFile: "build/.github/Releases-wip.md"
+          allowUpdates: true          
           token: ${{ secrets.CR_PAT }}
 
   x86-min:
