@@ -61,14 +61,16 @@ jobs:
           
       - name: Checkout repository
         uses: actions/checkout@v3
-          
+          fetch-depth: '1'
+          path: cache
+
       - name: Updating releases
         uses: ncipollo/release-action@v1.10.0
         with:
           repo: "cache"
           tag: "${{ env.ROOTFSCACHE_VERSION }}"
           name: "Build in progress"
-          bodyFile: ".github/Releases-wip.md"
+          bodyFile: "cache/.github/Releases-wip.md"
           allowUpdates: true
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
