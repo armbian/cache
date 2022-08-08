@@ -130,6 +130,7 @@ jobs:
       - name: Mount upload folders
         run: |
 
+          echo "Version: ${{ needs.release-start.outputs.rootfscache_version }}"
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
           sudo mkdir -p build/cache/rootfs.upload || true
@@ -169,7 +170,7 @@ jobs:
         uses: ncipollo/release-action@v1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
-          repo: "mirror"
+          repo: "cache"
           artifacts: "build/cache/rootfs.upload/*.torrent,build/cache/rootfs.upload/*.asc"
           tag: "rootfs"
           bodyFile: "build/.github/Releases.md"
