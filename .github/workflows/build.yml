@@ -53,7 +53,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
           repo: armbian/cache
-          keep_latest: 3
+          keep_latest: 2
           delete_tag_pattern: "0"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
