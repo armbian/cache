@@ -53,9 +53,9 @@ jobs:
         with:
           artifacts: "rootfscache.version"
           repo: "cache"
-          tag: ${{ env.ROOTFSCACHE_VERSION }}
-          name: "Build in progress"
-          bodyFile: "build/.github/Releases-wip.md"
+          tag: "latest"
+          name: "Latest"
+          bodyFile: "build/.github/Releases.md"
           allowUpdates: true          
           token: ${{ secrets.CR_PAT }}
 
