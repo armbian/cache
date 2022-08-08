@@ -76,8 +76,29 @@ jobs:
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
           
-  jobsend:
+  x86-min:
     needs: [release-start]
+    permissions:
+      contents: none
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+
+    with:
+
+      variant: 'minimal:uefi-x86'
+      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
+
+    secrets:
+      PAT1: ${{ secrets.CR_PAT }}
+      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
+      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
+      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
+      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
+      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
+      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
+      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
+
+  jobsend:
+    needs: [release-start,x86-min]
     permissions:
       contents: none
     name: Release finish    
