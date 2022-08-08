@@ -175,12 +175,21 @@ jobs:
       - name: Delete obsolete
         run: |
 
+          echo "DELETE_TAG=$(find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +4 | rev | cut -d'/' -f 1 | rev | head -1)" >> $GITHUB_ENV
           find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +4 | xargs sudo rm -r 2>/dev/null || true
 
           BRISI=($(diff <(find build/cache/rootfs.upload -name "*.lz4.current" | sed "s/.current//" | sort) <(find build/cache/rootfs.upload -name "*.lz4" | sort) | grep ">" | sed "s/> //"))
           for brisi in "${BRISI[@]}"; do
               sudo rm $brisi.*
           done
+
+      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: false
+          tag_name: ${{ env.DELETE_TAG }}
+    
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Unmount folders
         run: |
