@@ -28,34 +28,25 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Synching procedure expects this value
-      - run: |
-          echo "not empty" > changes
-
-      - uses: actions/upload-artifact@v3
-        with:
-          path: changes
-          name: changes
-          if-no-files-found: ignore
-
       - id: env-vars
         name: Read current version
         run: |
 
           ROOTFSCACHE_VERSION=$(wget --tries=10 -O - -o /dev/null https://github.com/armbian/cache/releases/download/latest/rootfscache.version || true)
           ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
+          ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
           echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
-#      - name: Purge
-#        uses: dev-drprasad/delete-older-releases@v0.2.0
-#        with:
-#          repo: armbian/cache
-#          keep_latest: 3
-#          delete_tag_pattern: "cache"
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Purge
+        uses: dev-drprasad/delete-older-releases@v0.2.0
+        with:
+          repo: armbian/cache
+          keep_latest: 3
+          delete_tag_pattern: "cache"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Updating releases
         uses: ncipollo/release-action@v1.10.0
@@ -64,7 +55,7 @@ jobs:
           repo: "cache"
           tag: ${{ env.ROOTFSCACHE_VERSION }}
           name: "Build in progress"
-          #bodyFile: "build/.github/Releases-wip.md"
+          bodyFile: "build/.github/Releases-wip.md"
           allowUpdates: true          
           token: ${{ secrets.CR_PAT }}
 
