@@ -116,6 +116,7 @@ jobs:
               sudo sshfs upload@users.armbian.com:/rootfs build/cache/rootfs.upload -o IdentityFile=~/.ssh/id_rsa -o reconnect -o allow_other || true
           fi
           # remove true in sshfs when all runners are on jammy
+          sudo mkdir -p build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }} || true
           sudo df
 
       - name: Signing
