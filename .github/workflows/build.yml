@@ -42,7 +42,8 @@ jobs:
         run: |
 
           ROOTFSCACHE_VERSION=$(curl https://api.github.com/repos/armbian/cache/releases/latest -s | jq .tag_name -r || true)
-          ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
+          [[ "$ROOTFSCACHE_VERSION" == null ]] && ROOTFSCACHE_VERSION="0000"
+          ROOTFSCACHE_VERSION=$(expr $ROOTFSCACHE_VERSION + 1)
           ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
           echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
