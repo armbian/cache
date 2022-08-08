@@ -53,7 +53,7 @@ jobs:
         with:
           repo: armbian/cache
           keep_latest: 3
-          delete_tag_pattern: "cache"
+          delete_tag_pattern: "0"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
@@ -65,9 +65,10 @@ jobs:
           tag: "latest"
           name: "Latest"
           bodyFile: "build/.github/Releases.md"
-          allowUpdates: true          
+          allowUpdates: true
+          removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
-
+          
   jobsend:
     needs: [release-start]
     permissions:
