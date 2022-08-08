@@ -169,7 +169,7 @@ jobs:
       - name: Delete obsolete
         run: |
 
-          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | tail -n +5 | xargs sudo rm -r
+          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | tail -n +4 | xargs sudo rm -r 2>/dev/null || true
 
           BRISI=($(diff <(find build/cache/rootfs.upload -name "*.lz4.current" | sed "s/.current//" | sort) <(find build/cache/rootfs.upload -name "*.lz4" | sort) | grep ">" | sed "s/> //"))
           for brisi in "${BRISI[@]}"; do
