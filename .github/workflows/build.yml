@@ -62,7 +62,7 @@ jobs:
         with:
           artifacts: "rootfscache.version"
           repo: "cache"
-          tag: "${{ needs.release-start.outputs.rootfscache_version }}"
+          tag: "${{ env.ROOTFSCACHE_VERSION }}"
           name: "Build in progress"
           bodyFile: "build/.github/Releases-wip.md"
           allowUpdates: true
