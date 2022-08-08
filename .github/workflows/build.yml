@@ -126,21 +126,21 @@ jobs:
           ANNOUNCE=$(cat trackerslist/trackers_best_ip.txt | head -1)ANNOUNCE=$(cat trackerslist/trackers_best_ip.txt | sed '/^$/d' | shuf -n 1)
           TRACKERS=$(cat trackerslist/trackers_all.txt | sed '/^\s*$/d' | while read line; do printf ",""${line}"; done | cut -c 2-)
           WEBSEEDS="--webseeds="https://github.com/armbian/mirror/releases/download/rootfs/\$FILE,"$(curl -s https://cache.armbian.com/mirrors | jq -r '.'default' | .[] | values' | sed -e 's/$/rootfs\/$FILE/' |  tr '\n' , | sed 's/.$//')"
-          cd build/cache/rootfs.upload
+          cd build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}
 
-          FILES=$(ls -1 *.lz4)
-          for FILE in ${FILES[@]}
-          do
-          if [[ ! -f $FILE.asc ]]; then
-              echo "$FILE"
-          fi
-          done | sudo --preserve-env parallel --jobs 18 '
-              echo "Signing {} "; echo ${{ secrets.GPG_PASSPHRASE1 }} | gpg --quiet --armor --batch --yes --passphrase-fd 0 --detach-sign --pinentry-mode loopback {};
-              echo "Generating {}.torrent "; buildtorrent -q -s -m '$WEBSEEDS' --announce="'$ANNOUNCE'" --announcelist="'$TRACKERS'" {} -c "Armbian rootfs cache" {}.torrent >/dev/null
-          '
-
-          # Update version
-          echo "${{ needs.release-start.outputs.rootfscache_version }}" | sudo tee rootfscache.version
+#          FILES=$(ls -1 *.lz4)
+#          for FILE in ${FILES[@]}
+#          do
+#          if [[ ! -f $FILE.asc ]]; then
+#              echo "$FILE"
+#          fi
+#          done | sudo --preserve-env parallel --jobs 18 '
+#              echo "Signing {} "; echo ${{ secrets.GPG_PASSPHRASE1 }} | gpg --quiet --armor --batch --yes --passphrase-fd 0 --detach-sign --pinentry-mode loopback {};
+#              echo "Generating {}.torrent "; buildtorrent -q -s -m '$WEBSEEDS' --announce="'$ANNOUNCE'" --announcelist="'$TRACKERS'" {} -c "Armbian rootfs cache" {}.torrent >/dev/null
+#          '
+#
+#          # Update version
+#          echo "${{ needs.release-start.outputs.rootfscache_version }}" | sudo tee rootfscache.version
 
       - name: Upload
         uses: ncipollo/release-action@v1
@@ -148,7 +148,7 @@ jobs:
         with:
           repo: "cache"
           artifacts: "build/cache/rootfs.upload/*.torrent,build/cache/rootfs.upload/*.asc"
-          tag: "rootfs"
+          tag: "${{ needs.release-start.outputs.rootfscache_version }}"
           bodyFile: "build/.github/Releases.md"
           name: "Rootfs cache"
           allowUpdates: true
