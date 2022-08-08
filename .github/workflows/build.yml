@@ -41,7 +41,7 @@ jobs:
         name: Read current version
         run: |
 
-          ROOTFSCACHE_VERSION=$(wget --tries=10 -O - -o /dev/null https://github.com/armbian/cache/releases/download/latest/rootfscache.version || true)
+          ROOTFSCACHE_VERSION=$(curl https://api.github.com/repos/armbian/cache/releases/latest -s | jq .name -r || true)
           ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
           ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
           echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
@@ -62,9 +62,9 @@ jobs:
         with:
           artifacts: "rootfscache.version"
           repo: "cache"
-          tag: "latest"
-          name: "Latest"
-          bodyFile: "build/.github/Releases.md"
+          tag: "${{ needs.release-start.outputs.rootfscache_version }}"
+          name: "Build in progress"
+          bodyFile: "build/.github/Releases-wip.md"
           allowUpdates: true
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
