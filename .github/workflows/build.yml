@@ -169,6 +169,8 @@ jobs:
       - name: Delete obsolete
         run: |
 
+          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | tail -n +5 | xargs sudo rm -r
+
           BRISI=($(diff <(find build/cache/rootfs.upload -name "*.lz4.current" | sed "s/.current//" | sort) <(find build/cache/rootfs.upload -name "*.lz4" | sort) | grep ">" | sed "s/> //"))
           for brisi in "${BRISI[@]}"; do
               sudo rm $brisi.*
