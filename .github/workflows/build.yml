@@ -69,6 +69,7 @@ jobs:
           token: ${{ secrets.CR_PAT }}
 
   jobsend:
+    needs: [release-start]
     permissions:
       contents: none
     name: Release finish    
