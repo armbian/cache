@@ -187,6 +187,8 @@ jobs:
         with:
           delete_release: false
           tag_name: ${{ env.DELETE_TAG }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.CR_PAT }}
     
       - name: Unmount folders
         run: |
