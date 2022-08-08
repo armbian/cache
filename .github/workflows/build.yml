@@ -67,7 +67,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/build-cache-v2.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
 
@@ -89,7 +89,7 @@ jobs:
       contents: none
     name: Release finish
     needs: [x86-min]
-    runs-on: [fast]
+    runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
