@@ -23,9 +23,10 @@ jobs:
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
-      # Synyching procedure expects this value
+      # Sync procedure expects this value
       - run: |
           echo "not empty" > changes
+
       - uses: actions/upload-artifact@v3
         with:
           path: changes
@@ -58,14 +59,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
           
+      - name: Checkout repository
+        uses: actions/checkout@v3
+          
       - name: Updating releases
         uses: ncipollo/release-action@v1.10.0
         with:
-          artifacts: "rootfscache.version"
           repo: "cache"
           tag: "${{ env.ROOTFSCACHE_VERSION }}"
           name: "Build in progress"
-          bodyFile: "build/.github/Releases-wip.md"
+          bodyFile: ".github/Releases-wip.md"
           allowUpdates: true
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
