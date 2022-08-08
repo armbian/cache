@@ -43,15 +43,15 @@ jobs:
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
-      - name: Purge
-        uses: dev-drprasad/delete-older-releases@v0.2.0
-        with:
-          repo: armbian/cache
-          keep_latest: 3
-          delete_tag_pattern: "cache"
-        env:
-          GITHUB_TOKEN: ${{ secrets.CR_PAT }}
-
+#      - name: Purge
+#        uses: dev-drprasad/delete-older-releases@v0.2.0
+#        with:
+#          repo: armbian/cache
+#          keep_latest: 3
+#          delete_tag_pattern: "cache"
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Updating releases
         uses: ncipollo/release-action@v1.10.0
         with:
