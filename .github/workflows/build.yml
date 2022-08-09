@@ -196,7 +196,7 @@ jobs:
           artifacts: "build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.torrent,build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.asc"
           tag: "${{ needs.release-start.outputs.rootfscache_version }}"
           bodyFile: "cache/.github/Releases.md"
-          name: "Rootfs cache"
+          name: "Rootfs cache #${{ needs.release-start.outputs.rootfscache_version }}"
           allowUpdates: true
           token: ${{ secrets.CR_PAT }}
 
