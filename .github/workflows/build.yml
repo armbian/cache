@@ -55,7 +55,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
           repo: armbian/cache
-          keep_latest: 2
+          keep_latest: 1
           delete_tag_pattern: "0"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
@@ -329,8 +329,8 @@ jobs:
       - name: Delete obsolete folders
         run: |
 
-          echo "DELETE_TAG=$(find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +4 | rev | cut -d'/' -f 1 | rev | head -1)" >> $GITHUB_ENV
-          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +4 | xargs sudo rm -r 2>/dev/null || true
+          echo "DELETE_TAG=$(find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | rev | cut -d'/' -f 1 | rev | head -1)" >> $GITHUB_ENV
+          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | xargs sudo rm -r 2>/dev/null || true
 
       - name: Delete obsolete tag
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
