@@ -16,18 +16,19 @@ jobs:
   release-start:
     permissions:
       contents: none
-    name: Release start
+    name: Preparation
     runs-on: [X64]
     outputs:
       rootfscache_version: ${{ steps.env-vars.outputs.rootfscache_version }}
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
-      # Sync procedure expects this value
-      - run: |
+      - name: Sync procedure expects this value
+        run: |
           echo "not empty" > changes
 
-      - uses: actions/upload-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
           path: changes
           name: changes
@@ -38,8 +39,8 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - id: env-vars
-        name: Read current version
+      - name: Get current release
+        id: env-vars
         run: |
 
           ROOTFSCACHE_VERSION=$(curl https://api.github.com/repos/armbian/cache/releases/latest -s | jq .tag_name -r || true)
@@ -50,7 +51,7 @@ jobs:
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
-      - name: Purge
+      - name: Purge old releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
           repo: armbian/cache
@@ -59,13 +60,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
           
-      - name: Checkout repository
+      - name: Checkout cache repository
         uses: actions/checkout@v3
         with:
           fetch-depth: '1'
           path: cache
 
-      - name: Updating releases
+      - name: Update release
         uses: ncipollo/release-action@v1.10.0
         with:
           repo: "cache"
@@ -123,22 +124,6 @@ jobs:
           fetch-depth: '1'
           path: cache
 
-      - name: Checkout tracker lists
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: '1'
-          repository: ngosang/trackerslist
-          path: trackerslist
-          clean: true
-
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v5
-        with:
-          gpg_private_key: ${{ secrets.GPG_KEY1 }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE1 }}
-          workdir: build
-          git_user_signingkey: true
-
       - name: Install SSH key for storage
         uses: shimataro/ssh-key-action@v2
         with:
@@ -161,57 +146,27 @@ jobs:
               sudo sshfs upload@users.armbian.com:/rootfs build/cache/rootfs.upload -o IdentityFile=~/.ssh/id_rsa -o reconnect -o allow_other || true
           fi
           # remove true in sshfs when all runners are on jammy
-          sudo mkdir -p build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }} || true
           sudo df
-
-      - name: Signing
-        run: |
-
-          sudo apt-get -y -qq install parallel buildtorrent
-
-          ANNOUNCE=$(cat trackerslist/trackers_best_ip.txt | head -1)ANNOUNCE=$(cat trackerslist/trackers_best_ip.txt | sed '/^$/d' | shuf -n 1)
-          TRACKERS=$(cat trackerslist/trackers_all.txt | sed '/^\s*$/d' | while read line; do printf ",""${line}"; done | cut -c 2-)
-          WEBSEEDS="--webseeds="https://github.com/armbian/cache/releases/download/${{ needs.release-start.outputs.rootfscache_version }}/\$FILE,"$(curl -s https://cache.armbian.com/mirrors | jq -r '.'default' | .[] | values' | sed -e 's/$/rootfs\/${{ needs.release-start.outputs.rootfscache_version }}\/$FILE/' |  tr '\n' , | sed 's/.$//')"
-          cd build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}
-
-#          FILES=$(ls -1 *.lz4)
-#          for FILE in ${FILES[@]}
-#          do
-#          if [[ ! -f $FILE.asc ]]; then
-#              echo "$FILE"
-#          fi
-#          done | sudo --preserve-env parallel --jobs 18 '
-#              echo "Signing {} "; echo ${{ secrets.GPG_PASSPHRASE1 }} | gpg --quiet --armor --batch --yes --passphrase-fd 0 --detach-sign --pinentry-mode loopback {};
-#              echo "Generating {}.torrent "; buildtorrent -q -s -m '$WEBSEEDS' --announce="'$ANNOUNCE'" --announcelist="'$TRACKERS'" {} -c "Armbian rootfs cache" {}.torrent >/dev/null
-#          '
-
-          # Update version
-          # echo "${{ needs.release-start.outputs.rootfscache_version }}" | sudo tee rootfscache.version
 
       - name: Upload
         uses: ncipollo/release-action@v1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
           repo: "cache"
-          artifacts: "build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.torrent,build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.asc"
           tag: "${{ needs.release-start.outputs.rootfscache_version }}"
           bodyFile: "cache/.github/Releases.md"
           name: "Rootfs cache #${{ needs.release-start.outputs.rootfscache_version }}"
           allowUpdates: true
           token: ${{ secrets.CR_PAT }}
 
-      - name: Delete obsolete
+      - name: Delete obsolete folders
         run: |
 
           echo "DELETE_TAG=$(find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +4 | rev | cut -d'/' -f 1 | rev | head -1)" >> $GITHUB_ENV
           find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +4 | xargs sudo rm -r 2>/dev/null || true
 
-          BRISI=($(diff <(find build/cache/rootfs.upload -name "*.lz4.current" | sed "s/.current//" | sort) <(find build/cache/rootfs.upload -name "*.lz4" | sort) | grep ">" | sed "s/> //"))
-          for brisi in "${BRISI[@]}"; do
-              sudo rm $brisi.*
-          done
-
-      - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      - name: Delete obsolete tag
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: false
           tag_name: ${{ env.DELETE_TAG }}
