@@ -174,16 +174,16 @@ jobs:
           WEBSEEDS="--webseeds="https://github.com/armbian/cache/releases/download/${{ needs.release-start.outputs.rootfscache_version }}/\$FILE,"$(curl -s https://cache.armbian.com/mirrors | jq -r '.'default' | .[] | values' | sed -e 's/$/rootfs\/${{ needs.release-start.outputs.rootfscache_version }}\/$FILE/' |  tr '\n' , | sed 's/.$//')"
           cd build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}
 
-          FILES=$(ls -1 *.lz4)
-          for FILE in ${FILES[@]}
-          do
-          if [[ ! -f $FILE.asc ]]; then
-              echo "$FILE"
-          fi
-          done | sudo --preserve-env parallel --jobs 18 '
-              echo "Signing {} "; echo ${{ secrets.GPG_PASSPHRASE1 }} | gpg --quiet --armor --batch --yes --passphrase-fd 0 --detach-sign --pinentry-mode loopback {};
-              echo "Generating {}.torrent "; buildtorrent -q -s -m '$WEBSEEDS' --announce="'$ANNOUNCE'" --announcelist="'$TRACKERS'" {} -c "Armbian rootfs cache" {}.torrent >/dev/null
-          '
+#          FILES=$(ls -1 *.lz4)
+#          for FILE in ${FILES[@]}
+#          do
+#          if [[ ! -f $FILE.asc ]]; then
+#              echo "$FILE"
+#          fi
+#          done | sudo --preserve-env parallel --jobs 18 '
+#              echo "Signing {} "; echo ${{ secrets.GPG_PASSPHRASE1 }} | gpg --quiet --armor --batch --yes --passphrase-fd 0 --detach-sign --pinentry-mode loopback {};
+#              echo "Generating {}.torrent "; buildtorrent -q -s -m '$WEBSEEDS' --announce="'$ANNOUNCE'" --announcelist="'$TRACKERS'" {} -c "Armbian rootfs cache" {}.torrent >/dev/null
+#          '
 
           # Update version
           # echo "${{ needs.release-start.outputs.rootfscache_version }}" | sudo tee rootfscache.version
