@@ -117,6 +117,12 @@ jobs:
           path: build
           clean: true
 
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '1'
+          path: cache
+
       - name: Checkout tracker lists
         uses: actions/checkout@v3
         with:
@@ -189,7 +195,7 @@ jobs:
           repo: "cache"
           artifacts: "build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.torrent,build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.asc"
           tag: "${{ needs.release-start.outputs.rootfscache_version }}"
-          bodyFile: "build/.github/Releases.md"
+          bodyFile: "cache/.github/Releases.md"
           name: "Rootfs cache"
           allowUpdates: true
           token: ${{ secrets.CR_PAT }}
