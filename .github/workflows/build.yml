@@ -187,7 +187,7 @@ jobs:
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
           repo: "cache"
-          artifacts: "build/cache/rootfs.upload/*.torrent,build/cache/rootfs.upload/*.asc"
+          artifacts: "build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.torrent,build/cache/rootfs.upload/${{ needs.release-start.outputs.rootfscache_version }}/*.asc"
           tag: "${{ needs.release-start.outputs.rootfscache_version }}"
           bodyFile: "build/.github/Releases.md"
           name: "Rootfs cache"
