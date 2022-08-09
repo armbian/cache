@@ -102,7 +102,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
 
@@ -123,7 +123,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
 
@@ -144,7 +144,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
 
@@ -166,7 +166,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
 
@@ -187,7 +187,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
       variant: 'desktop:tinkerboard'
@@ -207,7 +207,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
 
@@ -228,7 +228,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
 
@@ -249,7 +249,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
 
     with:
       variant: 'desktop:uefi-arm64'
