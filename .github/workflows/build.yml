@@ -274,8 +274,8 @@ jobs:
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
-      - name: Runner cleanup
-        uses: igorpecovnik/freespace@main
+      - name: Runner prepare
+        uses: armbian/actions/runner-prepare@main
 
       - name: Checkout repository
         uses: actions/checkout@v3
