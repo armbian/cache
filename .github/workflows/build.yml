@@ -175,24 +175,24 @@ jobs:
           allowUpdates: true
           token: ${{ secrets.CR_PAT }}
 
-      - name: Delete obsolete folders
-        run: |
-
-          echo "DELETE_TAG=$(find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | rev | cut -d'/' -f 1 | rev | head -1)" >> $GITHUB_ENV
-          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | xargs sudo rm -r 2>/dev/null || true
-
-      - name: Create latest file
-        run: |
-        
-          echo "${{ needs.release-start.outputs.rootfscache_version }}" >> find build/cache/rootfs.upload/latest
-
-      - name: Delete obsolete tag
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        with:
-          delete_release: false
-          tag_name: ${{ env.DELETE_TAG }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.CR_PAT }}
+#      - name: Delete obsolete folders
+#        run: |
+#
+#          echo "DELETE_TAG=$(find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | rev | cut -d'/' -f 1 | rev | head -1)" >> $GITHUB_ENV
+#          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | xargs sudo rm -r 2>/dev/null || true
+#
+#      - name: Create latest file
+#        run: |
+#        
+#          echo "${{ needs.release-start.outputs.rootfscache_version }}" >> find build/cache/rootfs.upload/latest
+#
+#      - name: Delete obsolete tag
+#        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+#        with:
+#          delete_release: false
+#          tag_name: ${{ env.DELETE_TAG }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.CR_PAT }}
     
-      - name: Runner prepare
-        uses: armbian/actions/runner-prepare@main
+#      - name: Runner prepare
+#        uses: armbian/actions/runner-prepare@main
