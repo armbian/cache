@@ -78,7 +78,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@optimize
 
     with:
 
@@ -99,7 +99,7 @@ jobs:
     needs: [release-start]
     permissions:
       contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+    uses: armbian/scripts/.github/workflows/update-cache.yml@optimize
 
     with:
 
