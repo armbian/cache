@@ -154,7 +154,7 @@ jobs:
           echo "Version: $(cat rootfscache/version)"
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
-          sudo mkdir -p build/cache/rootfs.upload || true
+          mkdir -p build/cache/rootfs.upload || true
           if [[ $(curl -s http://ifconfig.me) == "93.103.15.56" ]]; then
               sudo mount nas:/tank/armbian/users.armbian.com/upload/rootfs build/cache/rootfs.upload
           else
