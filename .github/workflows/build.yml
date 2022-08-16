@@ -48,7 +48,8 @@ jobs:
           ROOTFSCACHE_VERSION=$(expr $ROOTFSCACHE_VERSION + 1)
           ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
           echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
-          echo "$ROOTFSCACHE_VERSION" | sudo tee version
+          sudo mkdir -p rootfscache
+          echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache/version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
       - name: Upload artifact
