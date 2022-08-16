@@ -48,14 +48,14 @@ jobs:
           ROOTFSCACHE_VERSION=$(expr $ROOTFSCACHE_VERSION + 1)
           ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
           echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
-          echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
+          echo "$ROOTFSCACHE_VERSION" | sudo tee version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          path: rootfscache.version
-          name: rootfscache.version
+          path: rootfscache
+          name: version
           
       - name: Purge old releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
@@ -144,13 +144,13 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          path: rootfscache.version
-          name: rootfscache.version
+          path: rootfscache
+          name: version
 
       - name: Mount upload folders
         run: |
 
-          echo "Version: $(cat rootfscache.version)"
+          echo "Version: $(cat rootfscache/version)"
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
           sudo mkdir -p build/cache/rootfs.upload || true
