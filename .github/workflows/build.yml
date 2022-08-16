@@ -48,7 +48,7 @@ jobs:
           ROOTFSCACHE_VERSION=$(expr $ROOTFSCACHE_VERSION + 1)
           ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
           echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
-          sudo mkdir -p rootfscache
+          mkdir -p rootfscache
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache/version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
