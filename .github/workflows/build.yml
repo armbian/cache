@@ -16,14 +16,15 @@ jobs:
   release-start:
     permissions:
       contents: none
-    name: Preparation
-    runs-on: [X64]
+    name: Prepare
+    if: ${{ github.repository_owner == 'Armbian' }}
+    runs-on: [Linux]
     outputs:
       rootfscache_version: ${{ steps.env-vars.outputs.rootfscache_version }}
-    if: ${{ github.repository_owner == 'Armbian' }}
+
     steps:
 
-      - name: Sync procedure expects this value
+      - name: Make control artifact
         run: |
           echo "not empty" > changes
 
@@ -32,7 +33,6 @@ jobs:
         with:
           path: changes
           name: changes
-          if-no-files-found: ignore
 
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.10.0
@@ -54,7 +54,6 @@ jobs:
       - name: Purge old releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
-          repo: armbian/cache
           keep_latest: 1
           delete_tag_pattern: "0"
         env:
@@ -63,13 +62,11 @@ jobs:
       - name: Checkout cache repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: '1'
           path: cache
 
       - name: Update release
         uses: ncipollo/release-action@v1.10.0
         with:
-          repo: "cache"
           tag: "${{ env.ROOTFSCACHE_VERSION }}"
           name: "Build in progress"
           bodyFile: "cache/.github/Releases-wip.md"
@@ -86,48 +83,6 @@ jobs:
     with:
 
       variant: 'minimal:uefi-x86'
-      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
-
-    secrets:
-      PAT1: ${{ secrets.CR_PAT }}
-      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
-      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
-      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
-      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
-      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
-      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
-      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
-
-  x86-srv:
-    needs: [release-start]
-    permissions:
-      contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
-
-    with:
-
-      variant: 'server:uefi-x86'
-      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
-
-    secrets:
-      PAT1: ${{ secrets.CR_PAT }}
-      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
-      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
-      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
-      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
-      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
-      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
-      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
-
-  x86-x:
-    needs: [release-start]
-    permissions:
-      contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
-
-    with:
-
-      variant: 'desktop:uefi-x86'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -161,112 +116,8 @@ jobs:
       SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
       KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
 
-
-  armhf-srv:
-    needs: [release-start]
-    permissions:
-      contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
-
-    with:
-
-      variant: 'server:tinkerboard'
-      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
-
-    secrets:
-      PAT1: ${{ secrets.CR_PAT }}
-      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
-      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
-      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
-      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
-      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
-      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
-      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
-
-  armhf-x:
-    needs: [release-start]
-    permissions:
-      contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
-
-    with:
-      variant: 'desktop:tinkerboard'
-      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
-
-    secrets:
-      PAT1: ${{ secrets.CR_PAT }}
-      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
-      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
-      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
-      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
-      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
-      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
-      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
-
-  arm64-min:
-    needs: [release-start]
-    permissions:
-      contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
-
-    with:
-
-      variant: 'minimal:uefi-arm64'
-      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
-
-    secrets:
-      PAT1: ${{ secrets.CR_PAT }}
-      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
-      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
-      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
-      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
-      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
-      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
-      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
-
-  arm64-srv:
-    needs: [release-start]
-    permissions:
-      contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
-
-    with:
-
-      variant: 'server:uefi-arm64'
-      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
-
-    secrets:
-      PAT1: ${{ secrets.CR_PAT }}
-      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
-      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
-      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
-      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
-      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
-      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
-      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
-
-  arm64-x:
-    needs: [release-start]
-    permissions:
-      contents: none
-    uses: armbian/scripts/.github/workflows/update-cache.yml@master
-
-    with:
-      variant: 'desktop:uefi-arm64'
-      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
-
-    secrets:
-      PAT1: ${{ secrets.CR_PAT }}
-      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
-      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
-      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
-      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
-      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
-      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
-      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
-
   jobsend:    
-    needs: [x86-min,x86-srv,x86-x,armhf-min,armhf-srv,armhf-x,arm64-min,arm64-srv,arm64-x]
+    needs: [x86-min,armhf-min]
     permissions:
       contents: none
     name: Release finish    
@@ -283,7 +134,6 @@ jobs:
           fetch-depth: '1'
           repository: armbian/build
           path: build
-          clean: true
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -319,7 +169,6 @@ jobs:
         uses: ncipollo/release-action@v1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
-          repo: "cache"
           tag: "${{ needs.release-start.outputs.rootfscache_version }}"
           bodyFile: "cache/.github/Releases.md"
           name: "Rootfs cache #${{ needs.release-start.outputs.rootfscache_version }}"
@@ -345,25 +194,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
     
-      - name: Unmount folders
-        run: |
-
-          sudo mountpoint -q build/cache/rootfs && sudo fusermount -u build/cache/rootfs || true
-          sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
-
-  final-sync:
-    permissions:
-      contents: none
-    name: "Sync servers"
-    needs: [jobsend]
-    if: ${{ success() && github.repository_owner == 'Armbian' }}
-    uses: armbian/scripts/.github/workflows/sync-servers.yml@master
-
-    with:
-      KEY_ID: 'upload'
-
-    secrets:
-      KEY_UPLOAD: ${{ secrets.KEY_UPLOAD }}
-      USER_REPOSITORY: ${{ secrets.USER_REPOSITORY }}
-      HOST_REPOSITORY: ${{ secrets.HOST_REPOSITORY }}
-      KNOWN_HOSTS_REPOSITORY: ${{ secrets.KNOWN_HOSTS_REPOSITORY }}
+      - name: Runner prepare
+        uses: armbian/actions/runner-prepare@main
