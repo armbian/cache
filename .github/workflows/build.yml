@@ -136,6 +136,11 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
           if_key_exists: replace
 
+      - name: Mount upload folders
+        run: |
+
+          rm -f rootfscache.version
+
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
