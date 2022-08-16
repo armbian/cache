@@ -168,7 +168,7 @@ jobs:
         uses: ncipollo/release-action@v1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
-          tag: "$(cat rootfscache.version)"
+          tag: "$(cat rootfscache/version)"
           bodyFile: "cache/.github/Releases.md"
           name: "Rootfs cache #${{ needs.release-start.outputs.rootfscache_version }}"
           allowUpdates: true
