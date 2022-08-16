@@ -51,6 +51,12 @@ jobs:
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: rootfscache.version
+          name: rootfscache.version
+          
       - name: Purge old releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
@@ -100,7 +106,7 @@ jobs:
     permissions:
       contents: none
     name: Release finish    
-    runs-on: big
+    runs-on: Linux
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
@@ -113,12 +119,14 @@ jobs:
           fetch-depth: '1'
           repository: armbian/build
           path: build
+          clean: true
 
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: '1'
           path: cache
+          clean: true
 
       - name: Install SSH key for storage
         uses: shimataro/ssh-key-action@v2
@@ -128,10 +136,16 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
           if_key_exists: replace
 
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          path: rootfscache.version
+          name: rootfscache.version
+
       - name: Mount upload folders
         run: |
 
-          echo "Version: ${{ needs.release-start.outputs.rootfscache_version }}"          
+          echo "Version: $(cat rootfscache.version)"
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
           sudo mkdir -p build/cache/rootfs.upload || true
@@ -148,7 +162,7 @@ jobs:
         uses: ncipollo/release-action@v1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
-          tag: "${{ needs.release-start.outputs.rootfscache_version }}"
+          tag: "$(cat rootfscache.version)"
           bodyFile: "cache/.github/Releases.md"
           name: "Rootfs cache #${{ needs.release-start.outputs.rootfscache_version }}"
           allowUpdates: true
