@@ -116,8 +116,50 @@ jobs:
       SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
       KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
 
+  arm64-min:
+    needs: [release-start]
+    permissions:
+      contents: none
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+
+    with:
+
+      variant: 'minimal:uefi-arm64'
+      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
+
+    secrets:
+      PAT1: ${{ secrets.CR_PAT }}
+      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
+      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
+      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
+      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
+      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
+      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
+      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
+
+  arm64-srv:
+    needs: [release-start]
+    permissions:
+      contents: none
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+
+    with:
+
+      variant: 'server:uefi-arm64'
+      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
+
+    secrets:
+      PAT1: ${{ secrets.CR_PAT }}
+      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
+      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
+      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
+      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
+      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
+      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
+      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
+
   jobsend:    
-    needs: [x86-min,armhf-min]
+    needs: [x86-min,armhf-min,arm64-srv,arm64-min]
     permissions:
       contents: none
     name: Release finish    
