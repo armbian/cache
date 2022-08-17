@@ -74,7 +74,7 @@ jobs:
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
           
-x86-min:
+  x86-min:
     needs: [release-start]
     permissions:
       contents: none
