@@ -151,7 +151,8 @@ jobs:
       - name: Mount upload folders
         run: |
 
-          echo "Version: $(cat rootfscache/version)"
+          
+          echo "ROOTFSCACHE_VERSION=$(cat rootfscache/version)" >> $GITHUB_ENV
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
           mkdir -p build/cache/rootfs.upload || true
@@ -168,7 +169,7 @@ jobs:
         uses: ncipollo/release-action@v1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
-          tag: "$(cat rootfscache/version)"
+          tag: "${{ env.ROOTFSCACHE_VERSION }}"
           bodyFile: "cache/.github/Releases.md"
           name: "Rootfs cache #${{ needs.release-start.outputs.rootfscache_version }}"
           allowUpdates: true
