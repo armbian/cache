@@ -11,6 +11,9 @@ on:
       - cron: "30 0 15 * *" # Runs at 00:30 UTC on the 15st of every month.
   workflow_dispatch:
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
 
   release-start:
