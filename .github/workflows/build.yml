@@ -9,6 +9,7 @@ name: Build Rootfs Cache
 on:
   schedule:
       - cron: "30 0 15 * *" # Runs at 00:30 UTC on the 15st of every month.
+
   workflow_dispatch:
 
 env:
@@ -27,25 +28,15 @@ jobs:
 
     steps:
 
-#      - name: Make control artifact
-#        run: |
-#          echo "not empty" > changes
-
-      - name: Get latest cache
-        uses: armbian/actions/latest-cache@main
-
-#      - name: Upload artifact
-#        uses: actions/upload-artifact@v3
-#        with:
-#          path: changes
-#          name: changes
-
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get current release
+      - name: Get latest cacher release
+        uses: armbian/actions/latest-cache@main
+
+      - name: Increment cache number
         id: env-vars
         run: |
 
@@ -62,7 +53,7 @@ jobs:
       - name: Purge old releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
-          keep_latest: 3
+          keep_latest: 2
           delete_tags: true
           delete_tag_pattern: "0"
         env:
@@ -139,7 +130,7 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
           if_key_exists: replace
 
-      - name: Mount upload folders
+      - name: Cleanup
         run: |
 
           rm -f rootfscache.version
@@ -184,7 +175,7 @@ jobs:
       - name: Create latest file
         run: |
         
-          echo "${{ needs.release-start.outputs.rootfscache_version }}" >> find build/cache/rootfs.upload/latest
+          echo "${{ env.ROOTFSCACHE_VERSION }}" >> find build/cache/rootfs.upload/latest
    
       - name: Runner prepare
         uses: armbian/actions/runner-prepare@main
