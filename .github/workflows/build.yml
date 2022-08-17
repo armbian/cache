@@ -49,6 +49,8 @@ jobs:
         id: env-vars
         run: |
 
+          echo "To je ${{ env.ROOTFSCACHE_VERSION }}"
+
           ROOTFSCACHE_VERSION=$(curl https://api.github.com/repos/armbian/cache/releases/latest -s | jq .tag_name -r || true)
           [[ "$ROOTFSCACHE_VERSION" == null ]] && ROOTFSCACHE_VERSION="0000"
           ROOTFSCACHE_VERSION=$(expr $ROOTFSCACHE_VERSION + 1)
