@@ -62,6 +62,7 @@ jobs:
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
           keep_latest: 1
+          delete_tags: true
           delete_tag_pattern: "0"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
