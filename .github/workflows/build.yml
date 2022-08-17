@@ -9,53 +9,52 @@ name: Build Rootfs Cache
 on:
   schedule:
       - cron: "30 0 15 * *" # Runs at 00:30 UTC on the 15st of every month.
+
   workflow_dispatch:
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
 
   release-start:
     permissions:
       contents: none
-    name: Preparation
-    runs-on: [X64]
+    name: Prepare
+    if: ${{ github.repository_owner == 'Armbian' }}
+    runs-on: [Linux]
     outputs:
       rootfscache_version: ${{ steps.env-vars.outputs.rootfscache_version }}
-    if: ${{ github.repository_owner == 'Armbian' }}
+
     steps:
-
-      - name: Sync procedure expects this value
-        run: |
-          echo "not empty" > changes
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          path: changes
-          name: changes
-          if-no-files-found: ignore
 
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.10.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get current release
+      - name: Get latest cacher release
+        uses: armbian/actions/latest-cache@main
+
+      - name: Increment cache number
         id: env-vars
         run: |
 
-          ROOTFSCACHE_VERSION=$(curl https://api.github.com/repos/armbian/cache/releases/latest -s | jq .tag_name -r || true)
-          [[ "$ROOTFSCACHE_VERSION" == null ]] && ROOTFSCACHE_VERSION="0000"
-          ROOTFSCACHE_VERSION=$(expr $ROOTFSCACHE_VERSION + 1)
-          ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
-          echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
-          echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
-          echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
+          mkdir -p rootfscache
+          echo "${{ env.ROOTFSCACHE_VERSION }}" | tee rootfscache/version
+          echo ::set-output name=rootfscache_version::$(echo ${{ env.ROOTFSCACHE_VERSION }}) || true
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: rootfscache
+          name: version
+          
       - name: Purge old releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
-          repo: armbian/cache
-          keep_latest: 1
+          keep_latest: 2
+          delete_tags: true
           delete_tag_pattern: "0"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
@@ -63,13 +62,11 @@ jobs:
       - name: Checkout cache repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: '1'
           path: cache
 
       - name: Update release
         uses: ncipollo/release-action@v1.10.0
         with:
-          repo: "cache"
           tag: "${{ env.ROOTFSCACHE_VERSION }}"
           name: "Build in progress"
           bodyFile: "cache/.github/Releases-wip.md"
@@ -270,7 +267,7 @@ jobs:
     permissions:
       contents: none
     name: Release finish    
-    runs-on: big
+    runs-on: Linux
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
@@ -283,13 +280,14 @@ jobs:
           fetch-depth: '1'
           repository: armbian/build
           path: build
-          clean: true
+          clean: false
 
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
           fetch-depth: '1'
           path: cache
+          clean: false
 
       - name: Install SSH key for storage
         uses: shimataro/ssh-key-action@v2
@@ -299,13 +297,24 @@ jobs:
           known_hosts: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
           if_key_exists: replace
 
-      - name: Mount upload folders
+      - name: Cleanup
         run: |
 
-          echo "Version: ${{ needs.release-start.outputs.rootfscache_version }}"          
+          rm -f rootfscache.version
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          path: rootfscache
+          name: version
+
+      - name: Mount upload folders
+        run: |
+          
+          echo "ROOTFSCACHE_VERSION=$(cat rootfscache/version)" >> $GITHUB_ENV
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
-          sudo mkdir -p build/cache/rootfs.upload || true
+          mkdir -p build/cache/rootfs.upload || true
           if [[ $(curl -s http://ifconfig.me) == "93.103.15.56" ]]; then
               sudo mount nas:/tank/armbian/users.armbian.com/upload/rootfs build/cache/rootfs.upload
           else
@@ -319,51 +328,21 @@ jobs:
         uses: ncipollo/release-action@v1
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
-          repo: "cache"
-          tag: "${{ needs.release-start.outputs.rootfscache_version }}"
+          tag: "${{ env.ROOTFSCACHE_VERSION }}"
           bodyFile: "cache/.github/Releases.md"
-          name: "Rootfs cache #${{ needs.release-start.outputs.rootfscache_version }}"
+          name: "Rootfs cache #${{ env.ROOTFSCACHE_VERSION }}"
           allowUpdates: true
           token: ${{ secrets.CR_PAT }}
 
       - name: Delete obsolete folders
         run: |
 
-          echo "DELETE_TAG=$(find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | rev | cut -d'/' -f 1 | rev | head -1)" >> $GITHUB_ENV
           find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | xargs sudo rm -r 2>/dev/null || true
 
       - name: Create latest file
         run: |
         
-          echo "${{ needs.release-start.outputs.rootfscache_version }}" >> find build/cache/rootfs.upload/latest
-
-      - name: Delete obsolete tag
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
-        with:
-          delete_release: false
-          tag_name: ${{ env.DELETE_TAG }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.CR_PAT }}
-    
-      - name: Unmount folders
-        run: |
-
-          sudo mountpoint -q build/cache/rootfs && sudo fusermount -u build/cache/rootfs || true
-          sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
-
-  final-sync:
-    permissions:
-      contents: none
-    name: "Sync servers"
-    needs: [jobsend]
-    if: ${{ success() && github.repository_owner == 'Armbian' }}
-    uses: armbian/scripts/.github/workflows/sync-servers.yml@master
-
-    with:
-      KEY_ID: 'upload'
-
-    secrets:
-      KEY_UPLOAD: ${{ secrets.KEY_UPLOAD }}
-      USER_REPOSITORY: ${{ secrets.USER_REPOSITORY }}
-      HOST_REPOSITORY: ${{ secrets.HOST_REPOSITORY }}
-      KNOWN_HOSTS_REPOSITORY: ${{ secrets.KNOWN_HOSTS_REPOSITORY }}
+          echo "${{ env.ROOTFSCACHE_VERSION }}" >> find build/cache/rootfs.upload/latest
+   
+      - name: Runner prepare
+        uses: armbian/actions/runner-prepare@main
