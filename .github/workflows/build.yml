@@ -186,6 +186,7 @@ jobs:
           echo "${{ needs.release-start.outputs.rootfscache_version }}" >> find build/cache/rootfs.upload/latest
 
       - name: Delete obsolete tag
+        if: ${{ env.DELETE_TAG != '' }}
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: false
