@@ -27,18 +27,18 @@ jobs:
 
     steps:
 
-      - name: Make control artifact
-        run: |
-          echo "not empty" > changes
+#      - name: Make control artifact
+#        run: |
+#          echo "not empty" > changes
 
       - name: Get latest cache
         uses: armbian/actions/latest-cache@main
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          path: changes
-          name: changes
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v3
+#        with:
+#          path: changes
+#          name: changes
 
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.10.0
@@ -49,16 +49,9 @@ jobs:
         id: env-vars
         run: |
 
-          echo "To je ${{ env.ROOTFSCACHE_VERSION }}"
-
-          ROOTFSCACHE_VERSION=$(curl https://api.github.com/repos/armbian/cache/releases/latest -s | jq .tag_name -r || true)
-          [[ "$ROOTFSCACHE_VERSION" == null ]] && ROOTFSCACHE_VERSION="0000"
-          ROOTFSCACHE_VERSION=$(expr $ROOTFSCACHE_VERSION + 1)
-          ROOTFSCACHE_VERSION=$(printf "%04d\n" ${ROOTFSCACHE_VERSION})
-          echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
           mkdir -p rootfscache
-          echo "$ROOTFSCACHE_VERSION" | tee rootfscache/version
-          echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
+          echo "${{ env.ROOTFSCACHE_VERSION }}" | tee rootfscache/version
+          echo ::set-output name=rootfscache_version::$(echo ${{ env.ROOTFSCACHE_VERSION }}) || true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
