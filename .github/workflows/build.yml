@@ -49,7 +49,7 @@ jobs:
         with:
           path: rootfscache
           name: version
-          
+
       - name: Purge old releases
         uses: dev-drprasad/delete-older-releases@v0.2.0
         with:
@@ -58,7 +58,7 @@ jobs:
           delete_tag_pattern: "0"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
-          
+
       - name: Checkout cache repository
         uses: actions/checkout@v3
         with:
@@ -73,7 +73,7 @@ jobs:
           allowUpdates: true
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
-          
+
   x86-min:
     needs: [release-start]
     permissions:
@@ -262,11 +262,11 @@ jobs:
       SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
       KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
 
-  jobsend:    
+  jobsend:
     needs: [x86-min,x86-srv,x86-x,armhf-min,armhf-srv,armhf-x,arm64-min,arm64-srv,arm64-x]
     permissions:
       contents: none
-    name: Release finish    
+    name: Release finish
     runs-on: Linux
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
@@ -310,7 +310,7 @@ jobs:
 
       - name: Mount upload folders
         run: |
-          
+
           echo "ROOTFSCACHE_VERSION=$(cat rootfscache/version)" >> $GITHUB_ENV
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
@@ -339,10 +339,11 @@ jobs:
 
           find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | xargs sudo rm -r 2>/dev/null || true
 
-      - name: Create latest file
+      - name: Store release list into the file
         run: |
-        
-          echo "${{ env.ROOTFSCACHE_VERSION }}" >> find build/cache/rootfs.upload/latest
-   
-      - name: Runner prepare
+
+          cd cache
+          gh release list --exclude-drafts | awk '{print $(NF-1)}' | sort -r | sudo tee ../build/cache/rootfs.upload/list
+
+      - name: Cleanup
         uses: armbian/actions/runner-prepare@main
