@@ -337,7 +337,7 @@ jobs:
       - name: Delete obsolete folders
         run: |
 
-          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | xargs sudo rm -r 2>/dev/null || true
+          find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +3 | xargs sudo rm -r 2>/dev/null || true
 
       - name: Store release list into the file
         run: |
