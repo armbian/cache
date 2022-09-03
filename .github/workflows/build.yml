@@ -343,7 +343,7 @@ jobs:
         run: |
 
           cd build/cache/rootfs.upload
-          ls >list
+          find * -maxdepth 0 -type d >list
 
       - name: Cleanup
         uses: armbian/actions/runner-prepare@main
