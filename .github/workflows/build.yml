@@ -339,11 +339,11 @@ jobs:
 
           find build/cache/rootfs.upload -mindepth 1 -maxdepth 1 -type d | sort -r | tail -n +2 | xargs sudo rm -r 2>/dev/null || true
 
-      - name: Store release list into the file
+      - name: Generate cache list file
         run: |
 
-          cd cache
-          gh release list --exclude-drafts | awk '{print $(NF-1)}' | sort -r | sudo tee ../build/cache/rootfs.upload/list
+          cd build/cache/rootfs.upload
+          ls >list
 
       - name: Cleanup
         uses: armbian/actions/runner-prepare@main
