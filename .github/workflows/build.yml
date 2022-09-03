@@ -342,8 +342,8 @@ jobs:
       - name: Generate cache list file
         run: |
 
-          cd build/cache/rootfs.upload
-          find * -maxdepth 0 -type d >list
+          cd build/cache/rootfs.upload          
+          find * -maxdepth 0 -type d | sudo tee -a list
 
       - name: Cleanup
         uses: armbian/actions/runner-prepare@main
