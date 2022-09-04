@@ -33,17 +33,16 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Calc ROOTFSCACHE_VERSION
+      - name: Get latest cacher release
+        uses: armbian/actions/latest-cache@main
+
+      - name: Increment cache number
         id: env-vars
         run: |
 
-          ROOTFSCACHE_VERSION=$(date --utc +"%Y%m%d")
-
           mkdir -p rootfscache
-          echo "${ROOTFSCACHE_VERSION}" | tee rootfscache/version
-
-          echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION}" >> $GITHUB_ENV
-          echo ::set-output name=rootfscache_version::${ROOTFSCACHE_VERSION} || true
+          echo "${{ env.ROOTFSCACHE_VERSION }}" | tee rootfscache/version
+          echo ::set-output name=rootfscache_version::$(echo ${{ env.ROOTFSCACHE_VERSION }}) || true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
