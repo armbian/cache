@@ -316,7 +316,7 @@ jobs:
           sudo apt-get -y -qq install sshfs
           mkdir -p build/cache/rootfs.upload || true
           if [[ $(curl -s http://ifconfig.me) == "93.103.15.56" ]]; then
-              sudo mount nas:/tank/armbian/users.armbian.com/upload/rootfs build/cache/rootfs.upload
+              sudo mount nas:/tank/armbian/users.armbian.com/upload/rootfs build/cache/rootfs.upload || true
           else
               sudo sshfs upload@users.armbian.com:/rootfs build/cache/rootfs.upload -o IdentityFile=~/.ssh/id_rsa -o reconnect -o nonempty,allow_other || true
               sudo sshfs upload@users.armbian.com:/rootfs build/cache/rootfs.upload -o IdentityFile=~/.ssh/id_rsa -o reconnect -o allow_other || true
