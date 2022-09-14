@@ -7,8 +7,8 @@ name: Build Rootfs Cache
 #
 
 on:
-  schedule:
-      - cron: "30 0 15 * *" # Runs at 00:30 UTC on the 15st of every month.
+#  schedule:
+#      - cron: "30 0 15 * *" # Runs at 00:30 UTC on the 15st of every month.
 
   workflow_dispatch:
 
