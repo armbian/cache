@@ -262,8 +262,70 @@ jobs:
       SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
       KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
 
+  riscv64-min:
+    needs: [release-start]
+    permissions:
+      contents: none
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+
+    with:
+
+      variant: 'minimal:uefi-riscv64'
+      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
+
+    secrets:
+      PAT1: ${{ secrets.CR_PAT }}
+      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
+      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
+      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
+      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
+      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
+      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
+      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
+
+  riscv64-srv:
+    needs: [release-start]
+    permissions:
+      contents: none
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+
+    with:
+
+      variant: 'server:uefi-riscv64'
+      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
+
+    secrets:
+      PAT1: ${{ secrets.CR_PAT }}
+      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
+      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
+      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
+      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
+      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
+      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
+      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
+
+  riscv64-x:
+    needs: [release-start]
+    permissions:
+      contents: none
+    uses: armbian/scripts/.github/workflows/update-cache.yml@master
+
+    with:
+      variant: 'desktop:uefi-riscv64'
+      rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
+
+    secrets:
+      PAT1: ${{ secrets.CR_PAT }}
+      GPG_KEY1: ${{ secrets.GPG_KEY1 }}
+      GPG_PASSPHRASE1: ${{ secrets.GPG_PASSPHRASE1 }}
+      GPG_KEY2: ${{ secrets.GPG_KEY2 }}
+      GPG_PASSPHRASE2: ${{ secrets.GPG_PASSPHRASE2 }}
+      SCRIPTS_ACCESS_TOKEN: ${{ secrets.SCRIPTS_ACCESS_TOKEN }}
+      SSH_KEY_TORRENTS: ${{ secrets.KEY_TORRENTS }}
+      KNOWN_HOSTS_UPLOAD: ${{ secrets.KNOWN_HOSTS_UPLOAD }}
+
   jobsend:
-    needs: [x86-min,x86-srv,x86-x,armhf-min,armhf-srv,armhf-x,arm64-min,arm64-srv,arm64-x]
+    needs: [x86-min,x86-srv,x86-x,armhf-min,armhf-srv,armhf-x,arm64-min,arm64-srv,arm64-x,riscv64-min,riscv64-srv,riscv64-x]
     permissions:
       contents: none
     name: Release finish
