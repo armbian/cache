@@ -78,14 +78,6 @@ jobs:
               aptly publish -batch=true -passphrase=${{ secrets.GPG_PASSPHRASE1 }} snapshot ${{ matrix.project }}-${{ matrix.target }}
           fi
 
-          #ls -al
-          #du -h
-          #ls -l /home/runner/.aptly/public
-
-          #mkdir -p output
-          #find /home/runner/.aptly/public/pool/main/ -type f -exec mv {} . \;
-          #tar cvf ${{ matrix.project }}-${{ matrix.target }}.tar *.deb
-
       - name: Deploy to server
         run: |
 
@@ -118,29 +110,12 @@ jobs:
           mkdir -p ${HOME}/output
           cd ${HOME}/output
           gh release download -p '*.deb' --repo github.com/${{ matrix.project }}
-          #PROJECT=$(echo ${{ matrix.project }} | cut -d"/" -f2)
-          #tar cvf ${HOME}/output/${PROJECT}.tar *.deb
 
       - name: Deploy to server
         run: |
 
-          #pwd
-          ls -al ${HOME}/output
-          #ls -al /home/runner/output/
-
           sudo apt-get -y -qq install lftp
           lftp -u upload, -e "set net:timeout 4;set net:max-retries 6;mirror --Remove-source-files -R --no-empty-dirs --parallel=8 --no-perms ${HOME}/output/ debs-beta/ ;bye" sftp://users.armbian.com
-
-      - name: "Upload artefacts"
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "*.tar"
-          tag: "latest"
-          omitBody: true
-          replacesArtifacts: true
-          omitName: true
-          allowUpdates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
 
   stop:
 
