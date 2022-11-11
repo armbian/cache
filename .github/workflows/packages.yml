@@ -73,9 +73,11 @@ jobs:
 
           aptly mirror create ${{ matrix.project }}-${{ matrix.target }} ${PPA} ${{ matrix.target }} main
           if [[ $? -eq 0 ]]; then
+              mkdir -p ${HOME}/output/debs/extra/${{ matrix.target }}-utils
               aptly mirror update ${{ matrix.project }}-${{ matrix.target }}
               aptly snapshot create ${{ matrix.project }}-${{ matrix.target }} from mirror ${{ matrix.project }}-${{ matrix.target }}
               aptly publish -batch=true -passphrase=${{ secrets.GPG_PASSPHRASE1 }} snapshot ${{ matrix.project }}-${{ matrix.target }}
+              find /home/runner/.aptly/public/ -type f -exec cp {} mkdir -p ${HOME}/output/debs/extra/${{ matrix.target }}-utils \;
           fi
 
       - name: Deploy to server
@@ -83,7 +85,7 @@ jobs:
 
           sudo apt-get -y -qq install lftp
           if [[ -d /home/runner/.aptly/public/ ]]; then
-          lftp -u upload, -e "set net:timeout 4;set net:max-retries 6;mirror --Remove-source-files -R --no-empty-dirs --parallel=8 --no-perms /home/runner/.aptly/public/ debs-beta/ ;bye" sftp://users.armbian.com
+          lftp -u upload, -e "set net:timeout 4;set net:max-retries 6;mirror --Remove-source-files -R --no-empty-dirs --parallel=8 --no-perms ${HOME}/output/debs/ debs-beta/ ;bye" sftp://users.armbian.com
           fi
 
   github:
