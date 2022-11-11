@@ -77,7 +77,7 @@ jobs:
               aptly mirror update ${{ matrix.project }}-${{ matrix.target }}
               aptly snapshot create ${{ matrix.project }}-${{ matrix.target }} from mirror ${{ matrix.project }}-${{ matrix.target }}
               aptly publish -batch=true -passphrase=${{ secrets.GPG_PASSPHRASE1 }} snapshot ${{ matrix.project }}-${{ matrix.target }}
-              find /home/runner/.aptly/public/ -type f -exec cp {} mkdir -p ${HOME}/output/debs/extra/${{ matrix.target }}-utils \;
+              find /home/runner/.aptly/public/ -type f -exec cp {} ${HOME}/output/debs/extra/${{ matrix.target }}-utils \;
           fi
 
       - name: Deploy to server
