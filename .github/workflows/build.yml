@@ -29,7 +29,7 @@ jobs:
     steps:
 
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.10.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -51,7 +51,7 @@ jobs:
           name: version
 
       - name: Purge old releases
-        uses: dev-drprasad/delete-older-releases@v0.2.0
+        uses: ClementTsang/delete-tag-and-release@v0.3.1
         with:
           keep_latest: 2
           delete_tags: true
