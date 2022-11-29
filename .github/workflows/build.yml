@@ -65,7 +65,7 @@ jobs:
           path: cache
 
       - name: Update release
-        uses: ncipollo/release-action@v1.10.0
+        uses: ncipollo/release-action@v1.11.2        
         with:
           tag: "${{ env.ROOTFSCACHE_VERSION }}"
           name: "Build in progress"
