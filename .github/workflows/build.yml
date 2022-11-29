@@ -43,7 +43,7 @@ jobs:
           mkdir -p rootfscache
           echo "${{ env.ROOTFSCACHE_VERSION }}" | tee rootfscache/version
           #echo ::set-output name=rootfscache_version::$(echo ${{ env.ROOTFSCACHE_VERSION }}) || true
-          echo "rootfscache_version=$(echo ${{ env.ROOTFSCACHE_VERSION }})" >> $GITHUB_OUTPUT
+          echo "rootfscache_version=${{ env.ROOTFSCACHE_VERSION }}" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
