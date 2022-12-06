@@ -150,7 +150,7 @@ jobs:
     with:
 
       variant: 'minimal:tinkerboard'
-      runner: 'qemu'
+      runner: 'small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
