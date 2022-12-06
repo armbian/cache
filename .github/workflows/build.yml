@@ -84,7 +84,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-x86'
-      runner: 'ubuntu-minimal'
+      runner: 'ubuntu-latest'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -106,7 +106,7 @@ jobs:
     with:
 
       variant: 'server:uefi-x86'
-      runner: 'ubuntu-minimal'
+      runner: 'ubuntu-latest'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -128,7 +128,7 @@ jobs:
     with:
 
       variant: 'desktop:uefi-x86'
-      runner: 'ubuntu-minimal'
+      runner: 'ubuntu-latest'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
