@@ -42,7 +42,6 @@ jobs:
 
           mkdir -p rootfscache
           echo "${{ env.ROOTFSCACHE_VERSION }}" | tee rootfscache/version
-          #echo ::set-output name=rootfscache_version::$(echo ${{ env.ROOTFSCACHE_VERSION }}) || true
           echo "rootfscache_version=${{ env.ROOTFSCACHE_VERSION }}" >> $GITHUB_OUTPUT
 
       - name: Upload artifact
@@ -84,6 +83,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-x86'
+      runner: 'ubuntu-latest'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -105,6 +105,7 @@ jobs:
     with:
 
       variant: 'server:uefi-x86'
+      runner: 'ubuntu-latest'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -126,6 +127,7 @@ jobs:
     with:
 
       variant: 'desktop:uefi-x86'
+      runner: 'ubuntu-latest'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -147,6 +149,7 @@ jobs:
     with:
 
       variant: 'minimal:tinkerboard'
+      runner: 'small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -169,6 +172,7 @@ jobs:
     with:
 
       variant: 'server:tinkerboard'
+      runner: 'small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -189,6 +193,7 @@ jobs:
 
     with:
       variant: 'desktop:tinkerboard'
+      runner: 'small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -210,6 +215,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-arm64'
+      runner: 'small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -231,6 +237,7 @@ jobs:
     with:
 
       variant: 'server:uefi-arm64'
+      runner: 'aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -251,6 +258,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-arm64'
+      runner: 'qemu'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -272,6 +280,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-riscv64'
+      runner: 'igor'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -293,6 +302,7 @@ jobs:
     with:
 
       variant: 'server:uefi-riscv64'
+      runner: 'igor'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -313,6 +323,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-riscv64'
+      runner: 'igor'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
