@@ -84,6 +84,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-x86'
+      runner: 'ubuntu-minimal'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -105,6 +106,7 @@ jobs:
     with:
 
       variant: 'server:uefi-x86'
+      runner: 'ubuntu-minimal'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -126,6 +128,7 @@ jobs:
     with:
 
       variant: 'desktop:uefi-x86'
+      runner: 'ubuntu-minimal'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -147,6 +150,7 @@ jobs:
     with:
 
       variant: 'minimal:tinkerboard'
+      runner: 'qemu'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -169,6 +173,7 @@ jobs:
     with:
 
       variant: 'server:tinkerboard'
+      runner: 'qemu'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -189,6 +194,7 @@ jobs:
 
     with:
       variant: 'desktop:tinkerboard'
+      runner: 'small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -210,6 +216,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-arm64'
+      runner: 'aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -231,6 +238,7 @@ jobs:
     with:
 
       variant: 'server:uefi-arm64'
+      runner: 'aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -251,6 +259,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-arm64'
+      runner: 'big'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -272,6 +281,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-riscv64'
+      runner: 'igor'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -293,6 +303,7 @@ jobs:
     with:
 
       variant: 'server:uefi-riscv64'
+      runner: 'igor'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -313,6 +324,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-riscv64'
+      runner: 'igor'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
