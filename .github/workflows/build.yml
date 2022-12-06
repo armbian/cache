@@ -216,7 +216,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-arm64'
-      runner: 'aarch64'
+      runner: 'small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
