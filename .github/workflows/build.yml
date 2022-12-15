@@ -258,7 +258,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-arm64'
-      runner: 'qemu'
+      runner: 'qemu,fast'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
