@@ -302,7 +302,7 @@ jobs:
     with:
 
       variant: 'server:uefi-riscv64'
-      runner: 'igor,X64,fast'
+      runner: 'cache,RISCV64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
