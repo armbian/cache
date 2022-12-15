@@ -127,7 +127,7 @@ jobs:
     with:
 
       variant: 'desktop:uefi-x86'
-      runner: 'ubuntu-latest'
+      runner: 'cache,small'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -149,7 +149,7 @@ jobs:
     with:
 
       variant: 'minimal:tinkerboard'
-      runner: 'aarch64'
+      runner: 'cache,aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -172,7 +172,7 @@ jobs:
     with:
 
       variant: 'server:tinkerboard'
-      runner: 'aarch64'
+      runner: 'cache,aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -193,7 +193,7 @@ jobs:
 
     with:
       variant: 'desktop:tinkerboard'
-      runner: 'small'
+      runner: 'cache,aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -215,7 +215,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-arm64'
-      runner: 'aarch64'
+      runner: 'cache,aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -237,7 +237,7 @@ jobs:
     with:
 
       variant: 'server:uefi-arm64'
-      runner: 'aarch64'
+      runner: 'cache,aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -258,7 +258,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-arm64'
-      runner: 'qemu,fast'
+      runner: 'cache,aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -280,7 +280,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-riscv64'
-      runner: 'igor,X64,fast'
+      runner: 'cache,RISCV64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -323,7 +323,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-riscv64'
-      runner: 'igor,X64,fast'
+      runner: 'cache,RISCV64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
