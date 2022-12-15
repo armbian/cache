@@ -149,7 +149,7 @@ jobs:
     with:
 
       variant: 'minimal:tinkerboard'
-      runner: 'small'
+      runner: 'aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -172,7 +172,7 @@ jobs:
     with:
 
       variant: 'server:tinkerboard'
-      runner: 'small'
+      runner: 'aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -215,7 +215,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-arm64'
-      runner: 'small'
+      runner: 'aarch64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
