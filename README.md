@@ -4,8 +4,8 @@
   </a><br>
   <strong>Armbian Linux Cache Production</strong><br>
 <br>
-<a href=https://github.com/armbian/cache/actions/workflows/build.yml><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/armbian/cache/Build%20Rootfs%20Cache?logo=githubactions&label=Build%20Rootfs%20Cache&style=for-the-badge"></a>
- <br>
+<a href=https://github.com/armbian/cache/actions/workflows/build.yml><img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/armbian/cache/build.yml?logo=githubactions&label=Build%20Rootfs%20Cache&style=for-the-badge&branch=main"></a>
+<br>
 
 <br>
 <a href=https://twitter.com/armbian><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/armbian?logo=twitter&style=flat-square"></a>
