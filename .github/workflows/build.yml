@@ -127,7 +127,7 @@ jobs:
     with:
 
       variant: 'desktop:uefi-x86'
-      runner: 'cache,small'
+      runner: 'ubuntu-latest'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
