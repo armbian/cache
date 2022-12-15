@@ -280,7 +280,7 @@ jobs:
     with:
 
       variant: 'minimal:uefi-riscv64'
-      runner: 'igor'
+      runner: 'igor,X64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -302,7 +302,7 @@ jobs:
     with:
 
       variant: 'server:uefi-riscv64'
-      runner: 'igor'
+      runner: 'igor,X64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
@@ -323,7 +323,7 @@ jobs:
 
     with:
       variant: 'desktop:uefi-riscv64'
-      runner: 'igor'
+      runner: 'igor,X64'
       rootfscache_version: ${{ needs.release-start.outputs.rootfscache_version }}
 
     secrets:
