@@ -1,0 +1,44 @@
+name: Build u-boot
+on:
+  workflow_call:
+
+jobs:
+
+  legacy:
+    permissions:
+      contents: none
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-uboot-cache.yml
+
+    with:
+
+      runner: "ubuntu-latest"
+      include: 'grep legacy | '
+      exclude: ''
+
+  current:
+    permissions:
+      contents: none
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-uboot-cache.yml
+
+    with:
+
+      runner: "ubuntu-latest"
+      include: 'grep current | '
+      exclude: ''
+
+  edge:
+    permissions:
+      contents: none
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-uboot-cache.yml
+
+    with:
+
+      runner: "ubuntu-latest"
+      include: 'grep edge | '
+      exclude: ''
