@@ -1,4 +1,5 @@
-name: Build u-boot
+name: Build u-boots
+
 on:
   workflow_call:
 
