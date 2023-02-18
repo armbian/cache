@@ -5,7 +5,7 @@ on:
   workflow_call:
 
 env:
-   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
 
@@ -20,6 +20,10 @@ jobs:
 
       runner: "ubuntu-latest"
       include: 'grep legacy | '
+      
+    secrets:     
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
   Current:
     permissions:
