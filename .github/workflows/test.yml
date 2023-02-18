@@ -19,7 +19,7 @@ jobs:
       include: 'grep legacy | '
 
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.CR_PAT }}
       
   Current:
     permissions:
@@ -34,7 +34,7 @@ jobs:
       include: 'grep current | '
 
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.CR_PAT }}
 
   Edge:
     permissions:
@@ -49,4 +49,4 @@ jobs:
       include: 'grep edge | '
 
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.CR_PAT }}
