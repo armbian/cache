@@ -1,4 +1,4 @@
-name: Build u-boot cache
+name: Build Uboot Cache
 
 on:
   workflow_dispatch:
