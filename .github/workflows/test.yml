@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  legacy:
+  Legacy:
     permissions:
       contents: none
 
@@ -17,9 +17,8 @@ jobs:
 
       runner: "ubuntu-latest"
       include: 'grep legacy | '
-      exclude: ''
 
-  current:
+  Current:
     permissions:
       contents: none
 
@@ -30,9 +29,8 @@ jobs:
 
       runner: "ubuntu-latest"
       include: 'grep current | '
-      exclude: ''
 
-  edge:
+  Edge:
     permissions:
       contents: none
 
@@ -43,4 +41,3 @@ jobs:
 
       runner: "ubuntu-latest"
       include: 'grep edge | '
-      exclude: ''
