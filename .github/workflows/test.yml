@@ -26,7 +26,7 @@ jobs:
 
     with:
 
-      runner: "ubuntu-latest"
+      runner: "qemu"
       include: 'grep current | '
 
     secrets:
