@@ -7,8 +7,6 @@ on:
 jobs:
 
   Legacy:
-    permissions:
-      contents: none
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/armbian-framework-uboot-cache.yml@master
@@ -22,8 +20,6 @@ jobs:
       token: ${{ secrets.CR_PAT }}
       
   Current:
-    permissions:
-      contents: none
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/armbian-framework-uboot-cache.yml@master
@@ -37,8 +33,6 @@ jobs:
       token: ${{ secrets.CR_PAT }}
 
   Edge:
-    permissions:
-      contents: none
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/armbian-framework-uboot-cache.yml@master
