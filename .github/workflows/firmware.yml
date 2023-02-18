@@ -8,7 +8,7 @@ on:
 jobs:
 
   "Firmware":
-    if: ${{ github.repository_owner == 'rpardini' }}
+    if: ${{ github.repository_owner == 'armbian' }}
     runs-on: ubuntu-latest
     name: "Firmware (small and full)"
     env:
