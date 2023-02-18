@@ -1,0 +1,49 @@
+name: Build Uboot Cache
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+
+  Minimal-x86:
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
+
+    with:
+
+      type: 'minimal'
+      arch: 'uefi-x86'
+      runner: "ubuntu-latest"
+
+    secrets:
+      token: ${{ secrets.CR_PAT }}
+      
+  Minimal-aarch64:
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
+
+    with:
+
+      type: 'minimal'
+      arch: 'aarch64'
+      runner: "ubuntu-latest"
+
+    secrets:
+      token: ${{ secrets.CR_PAT }}
+
+  Minimal-armhf:
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
+
+    with:
+
+      type: 'minimal'
+      arch: 'armhf'
+      runner: "ubuntu-latest"
+      
+    secrets:
+      token: ${{ secrets.CR_PAT }}
