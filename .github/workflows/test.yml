@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   workflow_call:
 
+env:
+   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
 
   Legacy:
