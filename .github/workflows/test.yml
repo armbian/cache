@@ -21,10 +21,6 @@ jobs:
       runner: "ubuntu-latest"
       include: 'grep legacy | '
       
-    secrets:     
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
   Current:
     permissions:
       contents: none
