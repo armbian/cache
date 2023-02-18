@@ -1,4 +1,4 @@
-name: firmware-simple
+name: Build Firmware
 
 on:
   schedule:
@@ -24,7 +24,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}    # GitHub actions builtin token. repo has to have pkg access.
 
       - name: Checkout build repo
-        uses: actions/checkout@v3 # We don't need to clone git, really. A wget would suffice for GH-hosted runners. But using clone is better for Igor-hosted runners.
+        uses: actions/checkout@v3 # We don't need to clone git, really. A wget would suffice for GH-hosted runners, clone is better for self-hosted runners.
         with:
           repository: armbian/build #${{ github.repository_owner }}/armbian-build
           ref: main
@@ -35,6 +35,7 @@ jobs:
         id: firmware
         run: |
           bash ./compile.sh firmware SHARE_LOG=yes
+
       - name: Build firmware (full)
         id: firmware_full
         run: |
