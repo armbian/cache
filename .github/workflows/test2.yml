@@ -1,5 +1,4 @@
-name: Build Uboot Cache
-
+name: Rootfs
 on:
   workflow_dispatch:
   workflow_call:
