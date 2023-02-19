@@ -74,3 +74,32 @@ jobs:
       
     secrets:
       token: ${{ secrets.CR_PAT }}
+
+  GUI4:
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
+
+    with:
+
+      minimal: 'no'
+      desktop: 'yes'
+      variant: '3dsupport browsers chat desktop_tools editors email internet multimedia office programming remote_desktop'
+      
+    secrets:
+      token: ${{ secrets.CR_PAT }}
+      
+      
+  GUI5:
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
+
+    with:
+
+      minimal: 'no'
+      desktop: 'yes'
+      variant: 'browsers chat desktop_tools editors email internet multimedia office programming remote_desktop'
+      
+    secrets:
+      token: ${{ secrets.CR_PAT }}
