@@ -12,9 +12,8 @@ jobs:
 
     with:
 
-      type: 'minimal'
-      arch: 'uefi-x86'
-      runner: "ubuntu-latest"
+      minimal: 'yes'
+      desktop: 'no'
 
     secrets:
       token: ${{ secrets.CR_PAT }}
@@ -26,9 +25,8 @@ jobs:
 
     with:
 
-      type: 'minimal'
-      arch: 'aarch64'
-      runner: "ubuntu-latest"
+      minimal: 'no'
+      desktop: 'no'
 
     secrets:
       token: ${{ secrets.CR_PAT }}
@@ -40,9 +38,8 @@ jobs:
 
     with:
 
-      type: 'minimal'
-      arch: 'armhf'
-      runner: "ubuntu-latest"
+      minimal: 'no'
+      desktop: 'yes'
       
     secrets:
       token: ${{ secrets.CR_PAT }}
