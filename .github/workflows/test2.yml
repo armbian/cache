@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  Minimal-x86:
+  MIN:
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
@@ -18,7 +18,7 @@ jobs:
     secrets:
       token: ${{ secrets.CR_PAT }}
       
-  Minimal-aarch64:
+  SRV:
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
@@ -31,7 +31,7 @@ jobs:
     secrets:
       token: ${{ secrets.CR_PAT }}
 
-  Minimal-armhf:
+  GUI:
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
