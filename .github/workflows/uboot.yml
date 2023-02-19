@@ -1,4 +1,4 @@
-name: Build Uboot Cache
+name: Uboot
 
 on:
   workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
 
     secrets:
       token: ${{ secrets.CR_PAT }}
-      
+
   Current:
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
