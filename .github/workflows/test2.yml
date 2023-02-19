@@ -42,7 +42,7 @@ jobs:
 
       minimal: 'no'
       desktop: 'yes'
-      variant: ''
+      variant: 'x'
       
     secrets:
       token: ${{ secrets.CR_PAT }}
