@@ -13,7 +13,7 @@ jobs:
 
     with:
 
-      runner: "ubuntu-latest"
+      runner: "qemu"
       include: 'grep legacy | '
 
     secrets:
