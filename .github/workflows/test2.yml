@@ -14,6 +14,7 @@ jobs:
 
       minimal: 'yes'
       desktop: 'no'
+      variant: ''
 
     secrets:
       token: ${{ secrets.CR_PAT }}
@@ -27,6 +28,7 @@ jobs:
 
       minimal: 'no'
       desktop: 'no'
+      variant: ''
 
     secrets:
       token: ${{ secrets.CR_PAT }}
@@ -40,6 +42,7 @@ jobs:
 
       minimal: 'no'
       desktop: 'yes'
+      variant: '3dsupport browsers'
       
     secrets:
       token: ${{ secrets.CR_PAT }}
