@@ -42,12 +42,26 @@ jobs:
 
       minimal: 'no'
       desktop: 'yes'
-      variant: '3dsupport'
+      variant: ''
       
     secrets:
       token: ${{ secrets.CR_PAT }}
 
   GUI2:
+
+    if: ${{ success() && github.repository_owner == 'Armbian' }}
+    uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
+
+    with:
+
+      minimal: 'no'
+      desktop: 'yes'
+      variant: '3dsupport'
+      
+    secrets:
+      token: ${{ secrets.CR_PAT }}
+      
+  GUI3:
 
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/armbian-framework-rootfs-cache-v2.yml@master
