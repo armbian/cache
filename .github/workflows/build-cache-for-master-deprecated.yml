@@ -65,7 +65,7 @@ jobs:
           path: cache
 
       - name: Update release
-        uses: ncipollo/release-action@v1.12.0        
+        uses: ncipollo/release-action@v1.13.0        
         with:
           tag: "${{ env.ROOTFSCACHE_VERSION }}"
           name: "Build in progress"
@@ -399,7 +399,7 @@ jobs:
           sudo df
 
       - name: Upload
-        uses: ncipollo/release-action@v1.12.0
+        uses: ncipollo/release-action@v1.13.0
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
           tag: "${{ env.ROOTFSCACHE_VERSION }}"
