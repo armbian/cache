@@ -25,7 +25,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}    # GitHub actions builtin token. repo has to have pkg access.
 
       - name: Checkout build repo
-        uses: actions/checkout@v3 # We don't need to clone git, really. A wget would suffice for GH-hosted runners, clone is better for self-hosted runners.
+        uses: actions/checkout@v4 # We don't need to clone git, really. A wget would suffice for GH-hosted runners, clone is better for self-hosted runners.
         with:
           repository: armbian/build #${{ github.repository_owner }}/armbian-build
           ref: main

@@ -60,7 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
 
       - name: Checkout cache repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: cache
 
@@ -349,7 +349,7 @@ jobs:
         uses: armbian/actions/runner-prepare@main
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: '1'
           repository: armbian/build
@@ -357,7 +357,7 @@ jobs:
           clean: false
 
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: '1'
           path: cache
